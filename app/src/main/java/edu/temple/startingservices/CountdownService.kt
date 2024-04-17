@@ -1,7 +1,34 @@
 package edu.temple.startingservices
 
-import kotlinx.coroutines.Job
+import android.app.Service
+import android.content.Intent
+import android.os.Binder
+import android.os.IBinder
+import android.util.Log
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
-class CountdownService {
+const val COUNTDOWN_START_VALUE = "countdownvalue"
 
+class CountdownService : Service() {
+
+    override fun onBind(intent: Intent): IBinder {
+        return Binder()
+    }
+
+    override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
+        intent?.run {
+            val from = getIntExtra(COUNTDOWN_START_VALUE, 10)
+
+            CoroutineScope(Dispatchers.IO).launch {
+                repeat(from) {
+                    Log.d("Countdown", (from - it).toString())
+                    delay(1000)
+                }
+            }
+        }
+        return super.onStartCommand(intent, flags, startId)
+    }
 }

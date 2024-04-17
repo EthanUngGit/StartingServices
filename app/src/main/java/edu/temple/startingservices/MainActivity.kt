@@ -14,13 +14,9 @@ class MainActivity : AppCompatActivity() {
         val editTextValue: EditText = findViewById(R.id.editTextValue)
         val buttonStart: Button = findViewById(R.id.buttonStart)
 
-        buttonStart.setOnClickListener {
-            val value = editTextValue.text.toString().toIntOrNull()
-            if (value != null) {
-                val intent = Intent(this, CountdownService::class.java)
-                intent.putExtra("countdownValue", value)
-                startService(intent)
-            }
+        buttonStart.setOnClickListener() {
+            startService(Intent(this, CountdownService::class.java)
+                .putExtra(COUNTDOWN_START_VALUE, editTextValue.text.toString().toInt()))
         }
     }
 }
